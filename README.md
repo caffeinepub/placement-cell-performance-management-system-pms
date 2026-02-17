@@ -1,2 +1,3 @@
-# placement-cell-performance-management-system-pms
-Exported from Caffeine project: UniPlace Manager
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

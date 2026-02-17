@@ -1,0 +1,28 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Trigger fresh redeploy for UniPlace Manager preview URL",
+  "requirements": [
+    {
+      "id": "REQ-33",
+      "summary": "Create a no-functional-change frontend touch and update deployment documentation to trigger a fresh build + deploy and obtain a new preview URL.",
+      "acceptanceCriteria": [
+        "A new deployment is triggered for the current UniPlace Manager project.",
+        "After deployment completes, a new public preview URL is produced and shared.",
+        "Opening the new preview URL in a browser returns the application (no HTTP 400)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Add a non-functional redeploy marker comment (or similarly inert change) to force the deployment pipeline to rebuild and redeploy without changing application behavior or UI."
+        },
+        {
+          "path": "frontend/DEPLOYMENT.md",
+          "operation": "modify",
+          "description": "Update documentation with concise steps/checklist to request a fresh redeploy and verify the new public preview URL resolves without HTTP 400 (no feature/UI changes)."
+        }
+      ]
+    }
+  ]
+}

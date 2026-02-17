@@ -1,0 +1,362 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 19,
+  "summary": "Build a full Performance Management System (PMS) for a placement cell with two role-based dashboards (Admin/Placement Head/Coordinators with full access; Placement Assistance Team with limited access), including login/auth and backend storage, with an interactive, visually appealing React + Tailwind UI and a Motoko backend, branded as “UniPlace Manager” with “Performance Management System” terminology replaced by “Placement Cell.”",
+  "architectural_notes": [
+    "Frontend: React + TypeScript + Tailwind CSS",
+    "Backend: Motoko canister with backend storage (no PostgreSQL/MySQL)",
+    "Implement Role-Based Access Control (RBAC) to separate Admin/Coordinator vs Placement Assistance permissions",
+    "Email/notification features are not available (email disabled)",
+    "Login UX: present two login entry points (Admin vs Assistance) before triggering Internet Identity; after auth, verify stored role matches chosen option and block with an explicit error on mismatch (no automatic role escalation).",
+    "Dashboards are part of the same app/data model; modules/tabs differ by role but operate on shared backend entities/APIs.",
+    "Bootstrap admin (Option A): if system has no admins yet, the first authenticated user who selects the Admin login option is automatically granted Admin role; all other users remain blocked until an Admin assigns roles.",
+    "If authenticated principal has no role assigned, immediately fail the post-auth role check with an explicit 'no role assigned' error + one-click logout/clear-session action (no indefinite pending state).",
+    "Introduce an assignment/targeting model for entities (Goals, Feedback, Reviews, Competencies, Development Plans): target = All Assistance (applies to current+future users) or Specific Assistance member(s); Assistant UI displays two sections per module (Assigned to All vs Assigned to Me).",
+    "UI theming direction: blend built-in \"Tokyo\" theme with a pastel palette and off-white base (replace darker colors)."
+  ],
+  "known_issues": [
+    "Admin-created items (starting with Goals) are not appearing correctly in the Placement Assistance dashboard; need proper All-vs-Specific assignment handling and queries.",
+    "Build/deploy failed with a configuration error (Caffeine) when attempting full theme update + name changes; retry requested.",
+    "Deployed app can get stuck on a continuous \"Verifying access\" loading loop (login role check not resolving), preventing the system from opening.",
+    "Public preview URL is returning HTTP 400 consistently; user requested a fresh redeploy to regenerate a working preview URL."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-implement-authentication-and-authorization-with-a-dedicated-login-page-using-internet-identity-and-enforce-role-based-access-control-rbac-for-two-roles-1-admin-placement-head-placement-coordinators-full-access-and-2-placement-assistance-team-limited-access-include-a-secure-role-assignment-management-mechanism-so-admins-can-grant-revoke-roles-for-users",
+      "title": "Implement authentication and authorization with a dedicated login page using Internet Identity, and enforce Role-Based Access Control (RBAC) for two roles: (1) Admin/Placement Head/Placement Coordinators (full access) and (2) Placement Assistance Team (limited access). Include a secure role assignment/management mechanism so Admins can grant/revoke roles for users.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-coordinator-dashboard-ui-with-full-access-modules-user-role-management-goal-management-create-assign-track-performance-review-cycles-templates-self-manager-360-continuous-feedback-1-on-1-logs-competency-framework-management-and-assessments-development-plans-pips-calibration-tools-and-analytics-reporting-views",
+      "title": "Build the Admin/Coordinator dashboard UI with full-access modules: user/role management, goal management (create/assign/track), performance review cycles & templates (self/manager/360), continuous feedback & 1-on-1 logs, competency framework management and assessments, development plans/PIPs, calibration tools, and analytics/reporting views.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-placement-assistance-team-dashboard-ui-with-limited-access-view-assigned-goals-update-own-goal-progress-and-notes-submit-self-appraisals-view-submit-feedback-items-allowed-to-them-view-their-own-competency-report-and-view-their-own-development-plan-pip-if-assigned-hide-disable-all-admin-only-capabilities",
+      "title": "Build the Placement Assistance Team dashboard UI with limited access: view assigned goals, update own goal progress and notes, submit self-appraisals, view/submit feedback items allowed to them, view their own competency report, and view their own development plan/PIP if assigned. Hide/disable all admin-only capabilities.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-frontend-highly-interactive-and-visually-appealing-with-a-cohesive-non-blue-non-purple-visual-theme-consistent-typography-spacing-color-palette-and-component-styling-include-responsive-layouts-polished-empty-loading-states-and-interactive-data-visualizations-for-analytics-charts-filters-drill-down-where-appropriate-using-the-existing-react-tailwind-shadcn-ui-approach",
+      "title": "Make the frontend highly interactive and visually appealing with a cohesive, non-blue/non-purple visual theme (consistent typography, spacing, color palette, and component styling). Include responsive layouts, polished empty/loading states, and interactive data visualizations for analytics (charts, filters, drill-down where appropriate) using the existing React + Tailwind + shadcn/ui approach.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-image-assets-and-use-them-in-the-ui-include-an-app-logo-a-subtle-dashboard-background-texture-and-at-least-one-neutral-illustration-for-empty-states-store-generated-images-in-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend-do-not-proxy-through-backend",
+      "title": "Add generated static image assets and use them in the UI: include an app logo, a subtle dashboard background/texture, and at least one neutral illustration for empty states. Store generated images in frontend/public/assets/generated and reference them directly from the frontend (do not proxy through backend).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-login-page-to-present-two-explicit-internet-identity-login-options-1-login-as-placement-admin-and-2-login-as-placement-assistance-team-clicking-either-option-must-initiate-the-existing-internet-identity-login-flow",
+      "title": "Update the login page to present two explicit Internet Identity login options: (1) \"Login as Placement Admin\" and (2) \"Login as Placement Assistance Team\". Clicking either option must initiate the existing Internet Identity login flow.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-the-user-s-selected-login-intent-admin-vs-assistance-team-for-the-current-session-and-enforce-it-after-authentication-by-comparing-it-against-the-authenticated-principal-s-stored-role-from-the-backend-if-the-selected-option-does-not-match-the-stored-role-block-access-with-a-clear-error-message-and-provide-a-one-click-logout-clear-session-action-to-try-again",
+      "title": "Persist the user's selected login intent (admin vs assistance team) for the current session and enforce it after authentication by comparing it against the authenticated principal’s stored role from the backend. If the selected option does not match the stored role, block access with a clear error message and provide a one-click logout/clear-session action to try again.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-successful-logins-route-to-the-correct-dashboard-based-on-the-authenticated-user-s-stored-role-admin-routes-to-admin-assistant-user-routes-to-assistant-while-keeping-both-dashboards-part-of-the-same-application-and-navigation-system",
+      "title": "Ensure successful logins route to the correct dashboard based on the authenticated user’s stored role (admin routes to /admin, assistant/user routes to /assistant), while keeping both dashboards part of the same application and navigation system.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-bootstrap-admin-mechanism-option-a-so-that-in-a-brand-new-system-with-no-roles-assigned-the-first-user-who-selects-login-as-placement-admin-and-successfully-authenticates-via-internet-identity-is-automatically-assigned-the-admin-role-in-the-backend",
+      "title": "Implement a bootstrap-admin mechanism (Option A) so that in a brand-new system with no roles assigned, the first user who selects \"Login as Placement Admin\" and successfully authenticates via Internet Identity is automatically assigned the Admin role in the backend.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-login-flow-so-it-never-hangs-on-the-verifying-credentials-state-if-the-authenticated-principal-has-no-assigned-role-block-access-with-a-clear-error-message-and-provide-a-one-click-logout-clear-session-action-to-retry",
+      "title": "Fix the login flow so it never hangs on the \"Verifying credentials...\" state; if the authenticated principal has no assigned role, block access with a clear error message and provide a one-click logout/clear-session action to retry.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-current-user-role-fetching-verification-logic-so-backend-errors-or-unassigned-role-cases-resolve-deterministically-success-or-error-and-are-surfaced-to-the-ui-do-not-rely-on-role-truthiness-to-progress-the-login-state",
+      "title": "Update the current-user role fetching/verification logic so backend errors or unassigned-role cases resolve deterministically (success or error) and are surfaced to the UI; do not rely on role truthiness to progress the login state.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-bootstrap-admin-flow-so-that-in-a-brand-new-deployment-no-roles-assigned-yet-the-first-user-who-selects-login-as-placement-admin-and-authenticates-via-internet-identity-is-automatically-granted-the-admin-role-and-is-allowed-to-proceed-to-profile-setup-the-admin-dashboard-instead-of-being-blocked-with-a-not-assigned-error",
+      "title": "Fix the bootstrap-admin flow so that in a brand-new deployment (no roles assigned yet), the first user who selects \"Login as Placement Admin\" and authenticates via Internet Identity is automatically granted the Admin role and is allowed to proceed to profile setup / the Admin dashboard (instead of being blocked with a \"not assigned\" error).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-bootstrap-hook-and-login-verification-logic-to-call-the-new-backend-bootstrap-endpoint-instead-of-attempting-role-assignment-via-an-admin-only-role-management-method-and-to-re-fetch-role-profile-after-bootstrap-so-routing-proceeds-correctly",
+      "title": "Update the frontend bootstrap hook and login verification logic to call the new backend bootstrap endpoint (instead of attempting role assignment via an admin-only role-management method), and to re-fetch role/profile after bootstrap so routing proceeds correctly.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-standardize-the-user-facing-access-denied-mismatch-text-shown-during-login-to-use-consistent-english-phrasing-and-correct-role-names-placement-admin-vs-placement-assistance-team-matching-the-updated-bootstrap-behavior",
+      "title": "Standardize the user-facing access-denied/mismatch text shown during login to use consistent English phrasing and correct role names (\"Placement Admin\" vs \"Placement Assistance Team\"), matching the updated bootstrap behavior.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-goals-ui-to-allow-choosing-the-goal-assignment-mode-with-exactly-two-options-assign-to-all-assistance-members-and-assign-to-specific-member-s-when-specific-member-s-is-selected-allow-selecting-one-or-more-assistance-members-ensure-newly-created-goals-appear-correctly-for-assistants-based-on-the-selected-targeting",
+      "title": "Update the Admin Goals UI to allow choosing the goal assignment mode with exactly two options: “Assign to All Assistance Members” and “Assign to Specific Member(s)”. When “Specific Member(s)” is selected, allow selecting one or more assistance members. Ensure newly created goals appear correctly for assistants based on the selected targeting.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-placement-assistance-goals-ui-to-display-goals-in-two-clearly-separated-sections-assigned-to-all-and-assigned-to-me",
+      "title": "Update the Placement Assistance Goals UI to display goals in two clearly separated sections: “Assigned to All” and “Assigned to Me”.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-assignment-targeting-model-assign-to-all-assistance-members-vs-assign-to-specific-member-s-in-the-backend-for-feedback-items-created-by-admins-and-update-assistant-feedback-retrieval-so-assistants-see-items-assigned-to-all-and-items-assigned-to-them-separated-into-two-sections-in-the-assistant-ui",
+      "title": "Apply the same assignment targeting model (Assign to All Assistance Members vs Assign to Specific Member(s)) in the backend for Feedback items created by Admins, and update assistant feedback retrieval so assistants see items assigned to all and items assigned to them, separated into two sections in the assistant UI.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-assignment-targeting-model-in-the-backend-for-performance-reviews-so-admins-can-assign-a-review-to-all-assistance-members-current-and-future-or-specific-member-s-and-assistants-can-see-assigned-reviews-split-into-assigned-to-all-and-assigned-to-me",
+      "title": "Apply the same assignment targeting model in the backend for Performance Reviews so Admins can assign a review to All Assistance Members (current and future) or Specific Member(s), and assistants can see assigned reviews split into “Assigned to All” and “Assigned to Me”.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-assignment-targeting-model-for-competencies-so-admins-can-assign-competency-assessments-or-competency-requirements-to-all-assistance-members-or-specific-member-s-and-assistants-see-competency-items-split-into-assigned-to-all-and-assigned-to-me",
+      "title": "Apply the same assignment targeting model for Competencies so Admins can assign competency assessments (or competency requirements) to All Assistance Members or Specific Member(s), and assistants see competency items split into “Assigned to All” and “Assigned to Me”.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-same-assignment-targeting-model-for-development-plans-so-admins-can-assign-development-plans-to-all-assistance-members-current-and-future-or-specific-member-s-and-assistants-see-development-plans-split-into-assigned-to-all-and-assigned-to-me",
+      "title": "Apply the same assignment targeting model for Development Plans so Admins can assign development plans to All Assistance Members (current and future) or Specific Member(s), and assistants see development plans split into “Assigned to All” and “Assigned to Me”.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-adjust-frontend-react-query-hooks-in-the-existing-hooks-layer-to-support-listing-and-creating-items-with-assignment-targeting-across-goals-feedback-reviews-competencies-and-development-plans-and-ensure-query-keys-are-structured-so-that-changes-invalidate-and-refetch-correctly-for-both-admin-and-assistant-dashboards",
+      "title": "Add/adjust frontend React Query hooks (in the existing hooks layer) to support listing and creating items with assignment targeting across Goals, Feedback, Reviews, Competencies, and Development Plans, and ensure query keys are structured so that changes invalidate and refetch correctly for both Admin and Assistant dashboards.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-application-s-visual-theme-to-use-a-lighter-pastel-palette-with-an-off-white-base-instead-of-dark-colors-while-blending-in-the-existing-built-in-tokyo-theme-styling-and-apply-it-consistently-across-the-admin-dashboard-assistant-dashboard-and-login-page",
+      "title": "Update the application’s visual theme to use a lighter pastel palette with an off-white base (instead of dark colors), while blending in the existing built-in “Tokyo” theme styling, and apply it consistently across the Admin dashboard, Assistant dashboard, and Login page.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refine-key-screen-level-styling-to-match-the-new-pastel-off-white-tokyo-blend-including-background-overlays-gradients-and-translucency-so-the-dashboard-background-image-and-card-surfaces-feel-cohesive-and-not-heavy-dark",
+      "title": "Refine key screen-level styling to match the new pastel + off-white + Tokyo blend, including background overlays/gradients and translucency, so the dashboard background image and card surfaces feel cohesive and not heavy/dark.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-design-tokens-theme-palette-to-match-the-colors-in-the-uploaded-reference-screenshot-pms-png-and-apply-them-consistently-across-the-entire-application-login-page-admin-dashboard-assistant-dashboard-sidebar-tabs-buttons-cards-charts-empty-loading-error-states-without-changing-any-application-logic-or-features",
+      "title": "Update the frontend design tokens (theme palette) to match the colors in the uploaded reference screenshot (pms.png) and apply them consistently across the entire application (Login page, Admin dashboard, Assistant dashboard, sidebar, tabs, buttons, cards, charts, empty/loading/error states) without changing any application logic or features.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-application-branding-text-across-the-entire-frontend-so-the-system-name-is-shown-as-uniplace-manager-and-any-instance-of-performance-management-system-is-replaced-with-placement-cell-use-english-for-all-user-facing-text",
+      "title": "Update application branding text across the entire frontend so the system name is shown as “UniPlace Manager” and any instance of “Performance Management System” is replaced with “Placement Cell” (use English for all user-facing text).",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-trigger-a-new-deployment-of-the-current-uniplace-manager-application-and-once-deployment-completes-provide-the-public-preview-url-for-the-full-working-system",
+      "title": "Trigger a new deployment of the current UniPlace Manager application and, once deployment completes, provide the public preview URL for the full working system.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-trigger-a-fresh-deployment-build-deploy-of-the-current-uniplace-manager-application-and-once-deployment-completes-provide-a-new-public-preview-url-for-the-full-working-system",
+      "title": "Trigger a fresh deployment (build + deploy) of the current UniPlace Manager application and, once deployment completes, provide a new public preview URL for the full working system.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Full PMS application (frontend + Motoko backend + persistent storage) for placement cell",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Role-based authentication + login page (RBAC for Admin/Coordinator vs Placement Assistance)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Admin/Coordinator dashboard with full-access PMS modules (goals, reviews, feedback, competency, PIPs, analytics, calibration, user management)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Placement Assistance dashboard with limited-access modules (view/update own goals, self-appraisal, feedback, own competency report)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Interactive, visually appealing frontend UI styled with Tailwind (design based on provided reference image)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Create backend persistent storage and APIs in the single Motoko main actor for core PMS entities: Users (principal, role, profile fields), Goals (OKR/SMART, deadlines, status, progress), Performance Reviews/Appraisals (templates + submissions for self/manager/peer), Continuous Feedback/1-on-1 logs, Competencies/Skill mapping (definitions + user ratings), Development Plans/PIPs, and Calibration adjustments. Include CRUD operations and list/query endpoints required by the dashboards.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Update login flow to show two options (Login as Placement Admin / Login as Placement Assistance Team) that initiate Internet Identity login, then enforce RBAC by blocking with an error if the authenticated principal’s stored role doesn’t match the selected option",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add bootstrap-admin mechanism (Option A: first user who logs in via 'Login as Placement Admin' is auto-assigned Admin); block access for users with no assigned role and show clear error instead of infinite 'verifying credentials' spinner",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add/adjust backend APIs as needed to support: (a) retrieving the caller’s role in a way that distinguishes \"unassigned\" from \"assigned\" without trapping, and (b) performing the one-time bootstrap assignment when no Admin exists yet.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Update the backend to expose a dedicated, safe bootstrap endpoint that assigns the caller as Admin only when the system currently has no Admins, and returns a deterministic result (e.g., success/failed-because-admin-exists) without trapping for the expected \"admin already exists\" case.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Ensure backend \"current user\" fetching does not trap for unassigned users during login verification: role lookup must resolve deterministically to an \"unassigned/guest\" role (or equivalent) and profile lookup must not block bootstrap by trapping when no role is assigned.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Add \"Assign to All Assistance Members\" vs \"Assign to Specific Member(s)\" targeting across Goals, Feedback, Reviews, Competencies, and Development Plans; items assigned to All must apply to current and future Assistance users; update Admin creation UIs and Assistant dashboards to show two separate sections (Assigned to All vs Assigned to Me) per module",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Extend the backend data model for Goals to support assignment targeting with exactly two modes: (1) assigned to all Placement Assistance Team members (current and future) and (2) assigned to specific Placement Assistance Team member(s). Update all Goal-related backend APIs so Admins can create goals with a target mode, and assistants can list goals that are either assigned-to-all or assigned-to-me.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Implement a safe state upgrade path for existing stored items impacted by the new assignment-targeting fields, so upgrading a deployed canister does not trap and existing records remain accessible. Ensure reasonable default targeting is applied for pre-existing records so assistants are not blocked from seeing admin-created items unintentionally.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Update overall UI theme to a softer pastel palette using off-white as the base, blended with the built-in \"Tokyo\" theme styling",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Update application branding copy: rename the system to “UniPlace Manager” and replace the phrase “Performance Management System” with “Placement Cell” across the entire UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Apply the exact color palette from the provided reference screenshot across the entire application theme (login + admin + assistant dashboards) without making functional/system edits",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "UniPlace Manager",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

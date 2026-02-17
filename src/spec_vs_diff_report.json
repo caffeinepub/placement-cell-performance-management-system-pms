@@ -1,0 +1,62 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-15T18:22:29.208Z",
+  "summary": "REQ-33 requests a fresh redeploy and sharing a new working public preview URL (no HTTP 400). The diff shows multiple code/content changes (backend logic/types, frontend HTML title/marker, added deployment documentation, and large frontend feature/UI updates per the summaries), but it does not provide evidence of an actual deployment being triggered or a new preview URL being produced/shared.",
+  "missing_requirements": [
+    {
+      "id": "REQ-33",
+      "requirement": "Trigger a fresh deployment (build + deploy) of the current UniPlace Manager application and, once deployment completes, provide a new public preview URL for the full working system (no HTTP 400).",
+      "reason": "The diff contains code/documentation changes but does not include any new public preview URL, nor any concrete deployment output/metadata indicating a redeploy occurred and succeeded. A guide and an HTML 'deployment marker' do not satisfy the acceptance criteria of producing and sharing a new working preview URL.",
+      "evidence": [
+        "frontend/DEPLOYMENT.md",
+        "frontend/index.html"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Backend domain model/authorization logic changes (new/expanded types like AssignmentType/GoalStatus/Goal/etc., access control state, bootstrapAdmin, role/profile queries, and other backend modifications).",
+      "reason": "REQ-33 is only about triggering a redeploy and sharing a new preview URL; it explicitly disallows adding/changing application features/logic beyond what is necessary for redeploy.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Added a deployment guide document describing deployment/redeploy steps on the Caffeine.ai platform.",
+      "reason": "Documentation is not requested by REQ-33, and it does not itself trigger a redeploy or provide the new preview URL required by the acceptance criteria.",
+      "evidence": [
+        "frontend/DEPLOYMENT.md"
+      ]
+    },
+    {
+      "description": "Frontend HTML title change and addition of a 'Deployment marker' comment.",
+      "reason": "REQ-33 does not request any UI/content changes; these are changes to frontend output rather than evidence of an actual redeploy and new preview URL.",
+      "evidence": [
+        "frontend/index.html"
+      ]
+    },
+    {
+      "description": "Substantial frontend feature/UI/route/hook/module changes indicated by the frontend file summaries (e.g., router/auth guards, React Query hooks overhaul, multiple admin modules, styling/branding updates).",
+      "reason": "REQ-33’s non-goals forbid adding or changing application features, logic, or UI beyond what is necessary to complete the redeploy; these appear to be broad feature/UI work unrelated to simply triggering a fresh deployment.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Project state metadata/version updates (projectStateVersion and summary content).",
+      "reason": "REQ-33 does not request updating project tracking metadata; also does not satisfy redeploy + new URL acceptance criteria.",
+      "evidence": [
+        "project_state.json"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/DEPLOYMENT.md",
+    "frontend/index.html",
+    "project_state.json"
+  ]
+}

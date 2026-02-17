@@ -1,0 +1,38 @@
+{
+  "kind": "build_request",
+  "title": "Trigger fresh redeploy to resolve HTTP 400 preview URL",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-33",
+      "text": "Trigger a fresh deployment (build + deploy) of the current UniPlace Manager application and, once deployment completes, provide a new public preview URL for the full working system.",
+      "target": "unknown",
+      "source": {
+        "messageIds": [
+          "msg-recent-user-1"
+        ],
+        "quotes": [
+          "Rdeploy Now"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new deployment is triggered for the current UniPlace Manager project.",
+        "After deployment completes, a new public preview URL is produced and shared.",
+        "Opening the new preview URL in a browser returns the application (no HTTP 400)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Use English for any user-facing text.",
+    "Do not modify any frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+    "Backend must remain single-actor; keep Motoko logic in backend/main.mo (no new backend services)."
+  ],
+  "nonGoals": [
+    "Do not add or change application features, logic, or UI during this request beyond what is necessary to complete the redeploy.",
+    "Do not introduce new authentication providers or external infrastructure."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
