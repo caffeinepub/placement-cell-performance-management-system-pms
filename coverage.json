@@ -1,0 +1,49 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T15:35:21.432Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 2,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Create a deterministic utility function that maps any Principal ID string to a consistent 5-digit number (00001–99999) using a hash-based algorithm. The same Principal ID must always produce the same numeric output.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/utils/principals.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/utils/principals.ts"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update the UserProfileSection component (frontend/src/components/common/UserProfileSection.tsx) to display the 5-digit numeric representation of the Principal ID instead of the full Principal ID string. The copy-to-clipboard button should still copy the original full Principal ID.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/common/UserProfileSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/common/UserProfileSection.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/common/UserProfileSection.tsx",
+    "frontend/src/utils/principals.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

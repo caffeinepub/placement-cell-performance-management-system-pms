@@ -1,0 +1,40 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Convert Principal ID to 5-digit numeric display in user profile",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create a deterministic utility function that maps any Principal ID string to a consistent 5-digit number (00001–99999) using a hash-based algorithm",
+      "acceptanceCriteria": [
+        "A utility function exists (e.g., in frontend/src/utils/) that accepts a Principal ID string and returns a zero-padded 5-digit string between '00001' and '99999'",
+        "The function is deterministic: the same input always produces the same output",
+        "The function handles any valid Principal ID string without errors"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/principals.ts",
+          "operation": "modify",
+          "description": "Add a deterministic hash-based utility function that converts a Principal ID string to a zero-padded 5-digit numeric string (00001–99999). Use a simple hash algorithm (e.g., sum character codes, apply modulo 99999, add 1) to ensure the same Principal ID always produces the same 5-digit output. Export the function for use in components."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update the UserProfileSection component to display the 5-digit numeric representation of the Principal ID instead of the full Principal ID string, while preserving the copy-to-clipboard functionality for the original Principal ID",
+      "acceptanceCriteria": [
+        "The user profile section shows a 5-digit number (e.g., '42817') instead of the full Principal ID string",
+        "The displayed number is zero-padded to always be exactly 5 digits",
+        "The copy-to-clipboard button copies the original full Principal ID, not the numeric representation",
+        "The 5-digit display is consistent across sessions for the same Principal ID"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/common/UserProfileSection.tsx",
+          "operation": "modify",
+          "description": "Import the new utility function from frontend/src/utils/principals.ts. Replace the displayed Principal ID with the 5-digit numeric representation by calling the utility function. Keep the original Principal ID value for the copy-to-clipboard button so users can still copy the full Principal ID. Update the label or tooltip text to clarify that the displayed number is a shortened representation."
+        }
+      ]
+    }
+  ]
+}

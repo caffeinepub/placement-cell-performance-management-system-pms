@@ -1,0 +1,59 @@
+{
+  "kind": "build_request",
+  "title": "Convert Principal ID to 5-digit numeric display in user profile",
+  "projectName": "UniPlace Manager",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a deterministic utility function that maps any Principal ID string to a consistent 5-digit number (00001–99999) using a hash-based algorithm. The same Principal ID must always produce the same numeric output.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "convert the Principal ID into a shorter numeric representation — a maximum of 5 digits — to display in the user profile instead of the full Principal ID string"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A utility function exists (e.g., in frontend/src/utils/) that accepts a Principal ID string and returns a zero-padded 5-digit string between '00001' and '99999'",
+        "The function is deterministic: the same input always produces the same output",
+        "The function handles any valid Principal ID string without errors"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the UserProfileSection component (frontend/src/components/common/UserProfileSection.tsx) to display the 5-digit numeric representation of the Principal ID instead of the full Principal ID string. The copy-to-clipboard button should still copy the original full Principal ID.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "convert the pricipal id to only numbers(maximum of 5)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The user profile section shows a 5-digit number (e.g., '42817') instead of the full Principal ID string",
+        "The displayed number is zero-padded to always be exactly 5 digits",
+        "The copy-to-clipboard button copies the original full Principal ID, not the numeric representation",
+        "The 5-digit display is consistent across sessions for the same Principal ID"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify backend logic — the conversion must be purely a frontend utility",
+    "Do not edit files in frontend/src/hooks/useInternetIdentity.ts or other immutable paths",
+    "The copy-to-clipboard functionality must retain the original full Principal ID value"
+  ],
+  "nonGoals": [
+    "Storing the numeric ID in the backend",
+    "Using the numeric ID as a unique identifier for any backend operations",
+    "Changing the authentication or identity flow"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

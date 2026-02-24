@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "App with user authentication displaying Principal ID in profile section. Working on converting Principal ID to a deterministic 5-digit numeric representation.",
+  "architectural_notes": [
+    "Principal ID is displayed in user profile section when logged in",
+    "A deterministic hash function will map Principal IDs to consistent 5-digit numbers (00001-99999)"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-deterministic-utility-function-that-maps-any-principal-id-string-to-a-consistent-5-digit-number-00001-99999-using-a-hash-based-algorithm-the-same-principal-id-must-always-produce-the-same-numeric-output",
+      "title": "Create a deterministic utility function that maps any Principal ID string to a consistent 5-digit number (00001–99999) using a hash-based algorithm. The same Principal ID must always produce the same numeric output.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-userprofilesection-component-frontend-src-components-common-userprofilesection-tsx-to-display-the-5-digit-numeric-representation-of-the-principal-id-instead-of-the-full-principal-id-string-the-copy-to-clipboard-button-should-still-copy-the-original-full-principal-id",
+      "title": "Update the UserProfileSection component (frontend/src/components/common/UserProfileSection.tsx) to display the 5-digit numeric representation of the Principal ID instead of the full Principal ID string. The copy-to-clipboard button should still copy the original full Principal ID.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Convert Principal ID to a deterministic 5-digit numeric display (00001-99999) in user profile",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "UniPlace Manager",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

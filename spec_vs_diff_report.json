@@ -1,0 +1,15 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T15:35:21.429Z",
+  "summary": "Both REQ-1 and REQ-2 are fully implemented. A deterministic hash-based utility function `principalToShortId` was added to `frontend/src/utils/principals.ts`, and `UserProfileSection.tsx` was updated to display the 5-digit short ID while retaining the full Principal ID for clipboard copy.",
+  "missing_requirements": [],
+  "hallucinated_features": [],
+  "confidence": 0.97,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/common/UserProfileSection.tsx",
+    "frontend/src/utils/principals.ts",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-deterministic-utility-function-that-maps-any-principal-id-string-to-a-consistent-5-digit-number-00001-99999-using-a-hash-based-algorithm-the-same-principal-id-must-always-produce-the-same-numeric-output",
+      "featureTitle": "Create a deterministic utility function that maps any Principal ID string to a consistent 5-digit number (00001–99999) using a hash-based algorithm. The same Principal ID must always produce the same numeric output.",
+      "files": [
+        "frontend/src/utils/principals.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-userprofilesection-component-frontend-src-components-common-userprofilesection-tsx-to-display-the-5-digit-numeric-representation-of-the-principal-id-instead-of-the-full-principal-id-string-the-copy-to-clipboard-button-should-still-copy-the-original-full-principal-id",
+      "featureTitle": "Update the UserProfileSection component (frontend/src/components/common/UserProfileSection.tsx) to display the 5-digit numeric representation of the Principal ID instead of the full Principal ID string. The copy-to-clipboard button should still copy the original full Principal ID.",
+      "files": [
+        "frontend/src/components/common/UserProfileSection.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
